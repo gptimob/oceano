@@ -763,6 +763,11 @@ const PROFILES = {
 };
 const qs = new URLSearchParams(location.search);
 let perfil = (qs.get('v')||'geral').toLowerCase(); if(!PROFILES[perfil]) perfil='geral';
+// URL amigável: /?v=investidor (vindo de /investidor/) aparece como /investidor/ na barra
+if(qs.has('v') && /^\/(index\.html)?$/.test(location.pathname)){
+  const resto=new URLSearchParams(location.search); resto.delete('v'); const r=resto.toString();
+  history.replaceState(null,'',(perfil==='geral'?'/':'/'+perfil+'/')+(r?'?'+r:'')+location.hash);
+}
 
 function applyProfile(p){
   perfil=p; const P=PROFILES[p];
